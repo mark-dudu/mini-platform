@@ -16,11 +16,13 @@ It is not intended to be a container dashboard or a Kubernetes management tool. 
 
 The long-term direction is to provide a small, practical control layer for local development environments while keeping the core experience simple and predictable.
 
+Mini Platform is not a container dashboard.
+It is a developer workflow tool, where containers are only one possible implementation detail.
+
 ---
 
 ## Why
 
-As the number of local development projects grows, managing services manually becomes inefficient.
 As the number of local development projects grows, managing services manually becomes inefficient.
 
 Developers often need to:
@@ -62,23 +64,6 @@ The following capabilities are planned for V1:
 * [ ] Mock start services
 * [ ] Mock stop services
 
-### Example Configuration
-
-```yaml
-services:
-  redis:
-    command: "podman start redis"
-
-  blog:
-    command: "pnpm dev"
-
-  api:
-    command: "./start.sh"
-```
-
----
-
-## Out of Scope
 ### Example Configuration
 
 ```yaml
@@ -139,50 +124,6 @@ Keeping V1 intentionally small helps validate the core workflow quickly.
 ## Future Directions
 
 Possible enhancements after V1 include:
-Possible enhancements after V1 include:
-
-* Execute real start and stop commands
-* Support Podman-managed containers
-* View service logs
-* Restart services
-* Introduce a dedicated frontend application
-* Add plugin support
-* Support Kubernetes environments
-
----
-
-## Development Principles
-
-This project follows a few guiding principles:
-
-* Start simple and iterate quickly.
-* Prefer clarity over completeness.
-* Focus on solving real workflow problems.
-* Avoid unnecessary complexity in early versions.
-* Treat V1 as a learning and validation phase.
-
----
-
-## Status
-
-Current phase:
-
-**Planning and foundation setup**
-
-Progress:
-
-* [x] Repository initialized
-* [x] Initial README created
-* [ ] Define YAML schema
-* [ ] Implement service dashboard
-* [ ] Mock service actions
-* [ ] Complete V1
-
----
-
-## License
-
-This project is currently intended for personal learning and experimentation.
 
 * Execute real start and stop commands
 * Support Podman-managed containers
