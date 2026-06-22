@@ -1,4 +1,12 @@
-* text=auto eol=lf
+# Auto normalize line endings for all text files
+* text=auto
 
-*.bat text eol=crlf
-*.cmd text eol=crlf
+# Python files
+*.py text eol=lf
+
+# YAML files
+*.yaml text eol=lf
+*.yml text eol=lf
+
+# Markdown files
+*.md text eol=lf
