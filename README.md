@@ -8,6 +8,8 @@ The V1 goal is intentionally small: define services through a local YAML file, d
 
 This project is designed as a practical backend-focused portfolio project. It emphasizes clear API design, configuration-driven behavior, service state modeling, simple server-side rendering, and disciplined scope control.
 
+---
+
 ## Vision
 
 Mini Platform aims to simplify local development workflows by giving developers a single place to understand and control their local services.
@@ -15,9 +17,6 @@ Mini Platform aims to simplify local development workflows by giving developers 
 It is not intended to be a container dashboard or a Kubernetes management tool. It is a developer workflow tool first. Containers, scripts, and process managers are implementation details that may be supported later.
 
 The long-term direction is to provide a small, practical control layer for local development environments while keeping the core experience simple and predictable.
-
-Mini Platform is not a container dashboard.
-It is a developer workflow tool, where containers are only one possible implementation detail.
 
 ---
 
@@ -64,18 +63,126 @@ The following capabilities are planned for V1:
 * [ ] Mock start services
 * [ ] Mock stop services
 
-### Example Configuration
+---
+
+## Example Configuration
+
+Services are defined in `config/services.yaml`.
 
 ```yaml
 services:
-  redis:
-    command: "podman start redis"
-
-  blog:
+  - name: blog
     command: "pnpm dev"
+    working_dir: "../my-blog"
+    port: 3000
 
-  api:
-    command: "./start.sh"
+  - name: mini-platform
+    command: "uvicorn app.main:app --reload"
+    working_dir: "."
+    port: 8000
+```
+
+---
+
+## Project Structure
+
+```text
+mini-platform/
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── models/
+│   │   ├── __init__.py
+│   │   └── service.py
+│   ├── core/
+│   │   ├── __init__.py
+│   │   └── config_loader.py
+│   ├── runtime/
+│   │   ├── __init__.py
+│   │   └── manager.py
+│   ├── routes/
+│   │   ├── __init__.py
+│   │   └── services.py
+│   └── templates/
+│       └── index.html
+├── config/
+│   └── services.yaml
+├── learning-log.md
+├── README.md
+├── requirements.txt
+├── .gitignore
+└── .gitattributes
+```
+
+### Directory Responsibilities
+
+* `app/main.py`: FastAPI application entry point
+* `app/models/`: data models for service configuration and status
+* `app/core/`: core utilities such as configuration loading
+* `app/runtime/`: runtime state management for mock service actions
+* `app/routes/`: HTTP API routes
+* `app/templates/`: server-side rendered dashboard templates
+* `config/services.yaml`: local service definitions
+
+---
+
+## Tech Stack
+
+### Backend
+
+* Python
+* FastAPI
+* Pydantic
+
+### Frontend
+
+* Jinja2 templates
+
+### Configuration
+
+* YAML
+* PyYAML
+
+### Database
+
+* None
+
+### Deployment
+
+* Local only
+
+---
+
+## Local Development
+
+Create a virtual environment:
+
+```bash
+python -m venv .venv
+```
+
+Activate the virtual environment:
+
+```bash
+source .venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the application:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+Open the application:
+
+```text
+http://127.0.0.1:8000
 ```
 
 ---
@@ -94,30 +201,6 @@ The following items are intentionally excluded from V1:
 * Real command execution
 
 Keeping V1 intentionally small helps validate the core workflow quickly.
-
----
-
-## Tech Stack
-
-### Backend
-
-* FastAPI
-
-### Frontend
-
-* Jinja2 Templates (server-side rendering)
-
-### Configuration
-
-* YAML
-
-### Database
-
-* None
-
-### Deployment
-
-* Local only
 
 ---
 
@@ -151,12 +234,14 @@ This project follows a few guiding principles:
 
 Current phase:
 
-**Planning and foundation setup**
+**Foundation setup**
 
 Progress:
 
 * [x] Repository initialized
 * [x] Initial README created
+* [ ] Set up Python virtual environment
+* [ ] Initialize FastAPI project structure
 * [ ] Define YAML schema
 * [ ] Implement service dashboard
 * [ ] Mock service actions
