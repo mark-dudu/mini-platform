@@ -86,3 +86,37 @@
 * Define the initial YAML schema for local service definitions.
 * Implement configuration loading logic in `app/core/config_loader.py`.
 * Verify that service definitions can be loaded successfully by the backend.
+
+## Day 3 - Load Services from YAML Config (2026-06-23)
+
+### Goal
+
+* Load local service definitions from a YAML configuration file.
+* Convert raw YAML data into structured Python objects.
+* Verify that the backend can access configured services.
+
+### Completed
+
+* Added `ServiceConfig` model using Pydantic.
+* Implemented `load_services()` in `app/core/config_loader.py`.
+* Loaded service definitions from `config/services.yaml`.
+* Verified the result through the FastAPI root endpoint.
+* Confirmed that configured services are returned as structured JSON.
+
+### Issues Encountered
+
+* The service list is currently exposed through the root endpoint for temporary verification.
+* A dedicated `/api/services` endpoint has not been implemented yet.
+
+### Key Learnings
+
+* YAML configuration keeps service definitions separate from application logic.
+* Pydantic models help validate and structure configuration data.
+* Implementing configuration loading before API design keeps the development flow clear.
+* Temporary verification endpoints are useful during early development, but should be cleaned up later.
+
+### Next
+
+* Add a dedicated `GET /api/services` endpoint.
+* Introduce service status in the API response.
+* Keep the root endpoint simple and move service listing logic into the routes layer.
