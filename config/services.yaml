@@ -1,1 +1,11 @@
 # Services configuration
+services:
+  - name: blog
+    command: "pnpm dev"
+    working_dir: "../my-blog"
+    port: 3000
+
+  - name: mini-platform
+    command: "uvicorn app.main:app --reload"
+    working_dir: "."
+    port: 8000
