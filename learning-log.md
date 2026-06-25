@@ -120,3 +120,38 @@
 * Add a dedicated `GET /api/services` endpoint.
 * Introduce service status in the API response.
 * Keep the root endpoint simple and move service listing logic into the routes layer.
+
+## Day 4 - Add Services API (2026-06-25)
+
+### Goal
+
+* Add a dedicated API endpoint for listing configured services.
+* Move service listing logic out of the root endpoint.
+* Introduce a simple service view model with default status.
+
+### Completed
+
+* Added `ServiceView` model for API responses.
+* Created `GET /api/services/` endpoint.
+* Loaded service definitions from `config/services.yaml`.
+* Added default `status: stopped` for each configured service.
+* Registered the services router in `app/main.py`.
+* Restored the root endpoint as a simple health check.
+
+### Issues Encountered
+
+* FastAPI uses a trailing slash for the current `/api/services/` route.
+* The service status is still static and does not reflect runtime state yet.
+
+### Key Learnings
+
+* Separating configuration data from API response models makes the code easier to evolve.
+* A dedicated routes layer keeps `main.py` focused on application setup.
+* Static service status is acceptable for V1 because real command execution is intentionally out of scope.
+* The API response format now provides a foundation for the future dashboard and mock service actions.
+
+### Next
+
+* Build a simple dashboard page to display configured services.
+* Show service name, command, port, and status in the UI.
+* Keep the UI minimal and server-rendered with Jinja2.
