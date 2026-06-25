@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Platform</title>
+</head>
+<body>
+    <h1>Mini Platform</h1>
+
+    <p>A lightweight local development service manager.</p>
+
+    <h2>Configured Services</h2>
+
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Command</th>
+                <th>Working Directory</th>
+                <th>Port</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for service in services %}
+            <tr>
+                <td>{{ service.name }}</td>
+                <td><code>{{ service.command }}</code></td>
+                <td><code>{{ service.working_dir }}</code></td>
+                <td>{{ service.port }}</td>
+                <td>{{ service.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

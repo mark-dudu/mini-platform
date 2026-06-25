@@ -4,7 +4,6 @@ import yaml
 
 from app.models.service import ServiceConfig
 
-
 CONFIG_PATH = Path("config/services.yaml")
 
 
