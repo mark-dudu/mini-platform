@@ -155,3 +155,39 @@
 * Build a simple dashboard page to display configured services.
 * Show service name, command, port, and status in the UI.
 * Keep the UI minimal and server-rendered with Jinja2.
+
+## Day 5 - Display Configured Services (2026-06-25)
+
+### Goal
+
+* Build a simple server-rendered dashboard.
+* Display configured services from the YAML configuration file.
+* Keep the UI minimal and focused on service visibility.
+
+### Completed
+
+* Updated the root endpoint to render a Jinja2 template.
+* Added `index.html` as the initial dashboard page.
+* Displayed service name, command, working directory, port, and status.
+* Verified that the dashboard and `/api/services/` endpoint both work.
+
+### Issues Encountered
+
+* The initial `TemplateResponse` call used the older positional style and failed with the current Starlette version.
+* The issue was fixed by using explicit keyword arguments: `request`, `name`, and `context`.
+* The root page and API route currently duplicate service view construction logic.
+* The dashboard is intentionally minimal and does not include styling or actions yet.
+
+### Key Learnings
+
+* Jinja2 is sufficient for the V1 dashboard.
+* Server-side rendering keeps the frontend simple for this stage.
+* `TemplateResponse` behavior can vary by framework version, so explicit keyword arguments improve readability and compatibility.
+* Displaying configuration data in the UI makes the platform concept more concrete.
+* Duplication is acceptable temporarily, but should be cleaned up when runtime state management is introduced.
+
+### Next
+
+* Add mock start and stop controls.
+* Introduce a runtime manager to handle service status changes.
+* Keep real command execution out of V1.
