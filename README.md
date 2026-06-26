@@ -234,18 +234,20 @@ This project follows a few guiding principles:
 
 Current phase:
 
-**Foundation setup**
+**V1 core functionality completed**
 
 Progress:
 
 * [x] Repository initialized
 * [x] Initial README created
-* [ ] Set up Python virtual environment
-* [ ] Initialize FastAPI project structure
-* [ ] Define YAML schema
-* [ ] Implement service dashboard
-* [ ] Mock service actions
-* [ ] Complete V1
+* [x] Set up Python virtual environment
+* [x] Initialize FastAPI project structure
+* [x] Define YAML schema
+* [x] Load services from YAML configuration
+* [x] Implement services API
+* [x] Implement service dashboard
+* [x] Mock service actions
+* [ ] Review and polish V1
 
 ---
 
