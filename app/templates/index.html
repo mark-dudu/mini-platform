@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Mini Platform</title>
 </head>
+
 <body>
     <h1>Mini Platform</h1>
 
@@ -19,6 +21,7 @@
                 <th>Working Directory</th>
                 <th>Port</th>
                 <th>Status</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -29,9 +32,19 @@
                 <td><code>{{ service.working_dir }}</code></td>
                 <td>{{ service.port }}</td>
                 <td>{{ service.status }}</td>
+                <td>
+                    <form method="post" action="/services/{{ service.name }}/start" style="display:inline;">
+                        <button type="submit">Start</button>
+                    </form>
+
+                    <form method="post" action="/services/{{ service.name }}/stop" style="display:inline;">
+                        <button type="submit">Stop</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </body>
+
 </html>
