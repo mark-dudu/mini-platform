@@ -191,3 +191,38 @@
 * Add mock start and stop controls.
 * Introduce a runtime manager to handle service status changes.
 * Keep real command execution out of V1.
+
+## Day 6 - Add Mock Service Controls (2026-06-26)
+
+### Goal
+
+* Add mock start and stop actions for configured services.
+* Introduce runtime state management without executing real commands.
+* Allow the dashboard to control service status.
+
+### Completed
+
+* Added an in-memory runtime manager for service status.
+* Implemented mock start and stop logic.
+* Added API endpoints for starting and stopping services.
+* Updated the dashboard with Start and Stop buttons.
+* Verified that service status can change between `running` and `stopped`.
+* Kept real command execution out of V1.
+
+### Issues Encountered
+
+* The initial dashboard buttons returned JSON responses from API endpoints.
+* This was improved by adding dashboard-specific form routes that redirect back to the homepage.
+
+### Key Learnings
+
+* Runtime state should be separated from static service configuration.
+* Mock actions are useful for validating API and UI flow before implementing real process management.
+* Keeping real command execution out of V1 makes the system safer and easier to complete.
+* Redirecting after form submission provides a better dashboard experience than returning raw JSON.
+
+### Next
+
+* Review Mini Platform V1 against the original scope.
+* Update README status.
+* Prepare a short project summary for the Blog Projects section.
