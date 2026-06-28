@@ -247,10 +247,23 @@ Progress:
 * [x] Implement services API
 * [x] Implement service dashboard
 * [x] Mock service actions
-* [ ] Review and polish V1
+* [x] Review and polish V1
 
 ---
 
 ## License
 
 This project is currently intended for personal learning and experimentation.
+
+## V2 Direction
+
+Mini Platform V2 will introduce container-aware service definitions.
+
+The goal is to prepare the project for managing local container-based development services. At this stage, V2 focuses on service modeling and container runtime understanding, not full container orchestration.
+
+Planned V2 capabilities:
+
+* Distinguish local services and container services
+* Add container image and port mapping definitions
+* Display service type on the dashboard
+* Prepare for future Podman / Docker integration

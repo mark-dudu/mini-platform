@@ -226,3 +226,36 @@
 * Review Mini Platform V1 against the original scope.
 * Update README status.
 * Prepare a short project summary for the Blog Projects section.
+
+## Day 7 - V1 Verification and V2 Direction (2026-06-28)
+
+### Goal
+
+Verify that Mini Platform V1 still works correctly and define the direction for V2 container-aware service modeling.
+
+### Completed
+
+* Verified the current Git status.
+* Started the Mini Platform application locally.
+* Checked that services can be loaded from `services.yaml`.
+* Verified that `/api/services` returns the configured services.
+* Verified that the dashboard displays service information.
+* Confirmed that mock start / stop controls work.
+* Defined the V2 direction around container-aware service definitions.
+
+### Issues Encountered
+
+* None for now.
+
+### Key Learnings
+
+* V1 should remain stable before expanding the project scope.
+* V2 should first improve service modeling before integrating real container runtime operations.
+* Container support should be introduced incrementally through configuration design, not by jumping directly into process control or orchestration.
+
+### Next
+
+* Add a `type` field to service definitions.
+* Support `local` and `container` service metadata.
+* Display service type in the API and dashboard.
+
