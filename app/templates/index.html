@@ -17,6 +17,7 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Type</th>
                 <th>Command</th>
                 <th>Working Directory</th>
                 <th>Port</th>
@@ -28,6 +29,7 @@
             {% for service in services %}
             <tr>
                 <td>{{ service.name }}</td>
+                <td>{{ service.type }}</td>
                 <td><code>{{ service.command }}</code></td>
                 <td><code>{{ service.working_dir }}</code></td>
                 <td>{{ service.port }}</td>

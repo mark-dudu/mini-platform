@@ -259,3 +259,31 @@ Verify that Mini Platform V1 still works correctly and define the direction for 
 * Support `local` and `container` service metadata.
 * Display service type in the API and dashboard.
 
+## Day 8 - Add Service Type Field (2026-06-29)
+
+### Goal
+
+Add a service type field to distinguish local services from future container-based services.
+
+### Completed
+
+* Added `type: local` to existing service definitions in `services.yaml`.
+* Updated the service model to include a `type` field.
+* Verified that `/api/services` returns the service type.
+* Updated the dashboard to display the service type.
+* Confirmed that existing mock start / stop controls still work.
+
+### Issues Encountered
+
+* None for now.
+
+### Key Learnings
+
+* Adding a `type` field is a small but important modeling step.
+* Service modeling should evolve before runtime integration.
+* Keeping existing local services working helps avoid breaking V1 while preparing for V2.
+
+### Next
+
+* Add container service metadata such as image, container name, and port mappings.
+* Keep container support as metadata first before implementing real Podman or Docker operations.
