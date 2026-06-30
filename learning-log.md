@@ -287,3 +287,38 @@ Add a service type field to distinguish local services from future container-bas
 
 * Add container service metadata such as image, container name, and port mappings.
 * Keep container support as metadata first before implementing real Podman or Docker operations.
+
+## Day 9 - Container Runtime Basics (2026-06-30)
+
+### Goal
+
+Practice basic container runtime commands and understand the core concepts needed for future Mini Platform container integration.
+
+### Completed
+
+- Verified that Podman is available locally.
+- Ran the hello-world container successfully.
+- Checked running and stopped containers with `podman ps` and `podman ps -a`.
+- Listed local images with `podman images`.
+- Ran an nginx container with port mapping.
+- Verified nginx through `curl http://localhost:8080`.
+- Checked container logs with `podman logs`.
+- Stopped and removed the nginx demo container.
+
+### Issues Encountered
+
+- None.
+
+### Key Learnings
+
+- An image is a reusable template for creating containers.
+- A container is a running or stopped instance created from an image.
+- `podman ps` shows running containers, while `podman ps -a` shows all containers, including stopped ones.
+- Port mapping connects a host port to a container port, such as `8080:80`.
+- Container logs can become a useful data source for future service diagnostics in Mini Platform.
+- Container runtime integration should come after clear service modeling.
+
+### Next
+
+- Add container service metadata such as image, container name, and port mappings.
+- Keep the first container-related implementation focused on metadata, not real runtime control.
