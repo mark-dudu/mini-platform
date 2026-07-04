@@ -296,29 +296,67 @@ Practice basic container runtime commands and understand the core concepts neede
 
 ### Completed
 
-- Verified that Podman is available locally.
-- Ran the hello-world container successfully.
-- Checked running and stopped containers with `podman ps` and `podman ps -a`.
-- Listed local images with `podman images`.
-- Ran an nginx container with port mapping.
-- Verified nginx through `curl http://localhost:8080`.
-- Checked container logs with `podman logs`.
-- Stopped and removed the nginx demo container.
+* Verified that Podman is available locally.
+* Ran the hello-world container successfully.
+* Checked running and stopped containers with `podman ps` and `podman ps -a`.
+* Listed local images with `podman images`.
+* Ran an nginx container with port mapping.
+* Verified nginx through `curl http://localhost:8080`.
+* Checked container logs with `podman logs`.
+* Stopped and removed the nginx demo container.
 
 ### Issues Encountered
 
-- None.
+* None.
 
 ### Key Learnings
 
-- An image is a reusable template for creating containers.
-- A container is a running or stopped instance created from an image.
-- `podman ps` shows running containers, while `podman ps -a` shows all containers, including stopped ones.
-- Port mapping connects a host port to a container port, such as `8080:80`.
-- Container logs can become a useful data source for future service diagnostics in Mini Platform.
-- Container runtime integration should come after clear service modeling.
+* An image is a reusable template for creating containers.
+* A container is a running or stopped instance created from an image.
+* `podman ps` shows running containers, while `podman ps -a` shows all containers, including stopped ones.
+* Port mapping connects a host port to a container port, such as `8080:80`.
+* Container logs can become a useful data source for future service diagnostics in Mini Platform.
+* Container runtime integration should come after clear service modeling.
 
 ### Next
 
-- Add container service metadata such as image, container name, and port mappings.
-- Keep the first container-related implementation focused on metadata, not real runtime control.
+* Add container service metadata such as image, container name, and port mappings.
+* Keep the first container-related implementation focused on metadata, not real runtime control.
+
+## Day 10 - Cloud Server Container Runtime Test (2026-07-04)
+
+### Goal
+
+Install Podman on the cloud server and verify that the server can be used as a lightweight container experiment environment.
+
+### Completed
+
+* Installed Podman on the Ubuntu cloud server.
+* Verified Podman with `podman --version` and `podman info`.
+* Confirmed that Podman runs in rootless mode under the normal user.
+* Ran `quay.io/podman/hello` successfully.
+* Checked containers and images with `podman ps`, `podman ps -a`, and `podman images`.
+* Started a long-running container with port mapping.
+* Verified a BusyBox-based HTTP server through `curl http://localhost:8080`.
+* Stopped and removed test containers.
+
+### Issues Encountered
+
+* Pulling images from Docker Hub timed out on the cloud server.
+* `quay.io/podman/hello` worked successfully.
+* `quay.io/libpod/banner` started, but `curl http://localhost:8080` returned `Recv failure: Connection reset by peer`.
+* Switched to a simpler BusyBox HTTP server test to isolate the runtime from image-specific behavior.
+
+### Key Learnings
+
+* A container runtime can be installed correctly even if a specific image registry is unreachable.
+* Docker Hub access may be unstable from some cloud server environments.
+* Using an alternative registry such as Quay helps distinguish runtime issues from registry network issues.
+* Rootless Podman is suitable for lightweight personal container experiments.
+* Server-side container tests should first be verified locally on the server before exposing ports publicly.
+* Cloud deployment should be introduced gradually after runtime basics are stable.
+
+### Next
+
+* Add container service metadata to Mini Platform.
+* Keep the next implementation focused on metadata and display, not real remote deployment.
