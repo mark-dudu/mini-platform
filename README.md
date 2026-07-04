@@ -55,13 +55,13 @@ Real command execution is intentionally excluded from V1 to keep the first miles
 
 ## V1 Scope
 
-The following capabilities are planned for V1:
+The following capabilities have been completed in V1:
 
-* [ ] Define services using a local YAML configuration file
-* [ ] Display configured services
-* [ ] Show service status
-* [ ] Mock start services
-* [ ] Mock stop services
+* [x] Define services using a local YAML configuration file
+* [x] Display configured services
+* [x] Show service status
+* [x] Mock start services
+* [x] Mock stop services
 
 ---
 
@@ -72,11 +72,13 @@ Services are defined in `config/services.yaml`.
 ```yaml
 services:
   - name: blog
+    type: local
     command: "pnpm dev"
     working_dir: "../my-blog"
     port: 3000
 
   - name: mini-platform
+    type: local
     command: "uvicorn app.main:app --reload"
     working_dir: "."
     port: 8000
@@ -149,7 +151,8 @@ mini-platform/
 
 ### Deployment
 
-* Local only
+* Local development
+* Cloud server used as a Linux / container experiment environment
 
 ---
 
@@ -208,8 +211,9 @@ Keeping V1 intentionally small helps validate the core workflow quickly.
 
 Possible enhancements after V1 include:
 
-* Execute real start and stop commands
+* Add container service metadata
 * Support Podman-managed containers
+* Execute real start and stop commands
 * View service logs
 * Restart services
 * Introduce a dedicated frontend application
@@ -230,40 +234,38 @@ This project follows a few guiding principles:
 
 ---
 
-## Status
+## Project Status
 
 Current phase:
 
-**V1 core functionality completed**
+**V2 preparation: container-aware service modeling**
 
-Progress:
+### V1 Completed
 
-* [x] Repository initialized
-* [x] Initial README created
-* [x] Set up Python virtual environment
-* [x] Initialize FastAPI project structure
-* [x] Define YAML schema
-* [x] Load services from YAML configuration
-* [x] Implement services API
-* [x] Implement service dashboard
-* [x] Mock service actions
-* [x] Review and polish V1
+Mini Platform V1 has been completed as a mock local service manager.
 
----
+Completed capabilities:
 
-## License
+* Load service definitions from a local YAML configuration file
+* Expose service data through `/api/services`
+* Display configured services through a simple dashboard
+* Show service status
+* Provide mock start / stop controls
 
-This project is currently intended for personal learning and experimentation.
+### V2 Preparation
 
-## V2 Direction
+V2 preparation has started.
 
-Mini Platform V2 will introduce container-aware service definitions.
+Completed preparation work:
 
-The goal is to prepare the project for managing local container-based development services. At this stage, V2 focuses on service modeling and container runtime understanding, not full container orchestration.
+* Added a `type` field to service definitions
+* Marked existing services as `local`
+* Displayed service type in the API and dashboard
+* Practiced basic Podman commands locally
+* Installed and verified Podman on a cloud server
+* Verified a simple containerized HTTP service on the cloud server
 
-Planned V2 capabilities:
+Next step:
 
-* Distinguish local services and container services
-* Add container image and port mapping definitions
-* Display service type on the dashboard
-* Prepare for future Podman / Docker integration
+* Add container service metadata, including image, container name, and port mappings
+* Keep container support as metadata first before implementing real runtime control
