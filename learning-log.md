@@ -360,3 +360,38 @@ Install Podman on the cloud server and verify that the server can be used as a l
 
 * Add container service metadata to Mini Platform.
 * Keep the next implementation focused on metadata and display, not real remote deployment.
+
+## Day 10 - Establish V1 Test Coverage
+
+### Goal
+
+Preserve service type information across runtime layers and establish a regression test baseline for Mini Platform V1.
+
+### Completed
+
+* Fixed service type propagation in `list_service_views()`.
+* Fixed service type propagation in `start_service()` and `stop_service()`.
+* Added configuration loader tests.
+* Added runtime manager tests.
+* Added API tests for list, start, stop, and 404 responses.
+* Added a dashboard smoke test.
+* Added `pytest` and `httpx2` to project dependencies.
+* Verified that the complete test suite passes.
+
+### Issues Encountered
+
+* `pytest` was not initially installed in the virtual environment.
+* The project initially contained no test files, so pytest collected zero tests.
+* The installed Starlette version required `httpx2` for `TestClient`.
+
+### Key Learnings
+
+* Default model values can hide missing data propagation between layers.
+* Regression tests should protect behavior across configuration, runtime, API, and presentation boundaries.
+* External framework test dependencies must be explicitly recorded.
+* Mocking runtime dependencies keeps API tests isolated and deterministic.
+* Smoke tests are useful for verifying that the application can render without coupling tests to HTML details.
+
+### Next
+
+Define explicit `local` and `container` service types and add container-specific metadata.

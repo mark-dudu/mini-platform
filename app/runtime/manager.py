@@ -11,6 +11,7 @@ def list_service_views() -> list[ServiceView]:
     return [
         ServiceView(
             name=service.name,
+            type=service.type,
             command=service.command,
             working_dir=service.working_dir,
             port=service.port,
@@ -31,6 +32,7 @@ def start_service(service_name: str) -> ServiceView | None:
 
     return ServiceView(
         name=service.name,
+        type=service.type,
         command=service.command,
         working_dir=service.working_dir,
         port=service.port,
@@ -49,6 +51,7 @@ def stop_service(service_name: str) -> ServiceView | None:
 
     return ServiceView(
         name=service.name,
+        type=service.type,
         command=service.command,
         working_dir=service.working_dir,
         port=service.port,
