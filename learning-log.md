@@ -395,3 +395,36 @@ Preserve service type information across runtime layers and establish a regressi
 ### Next
 
 Define explicit `local` and `container` service types and add container-specific metadata.
+
+## Day 11 - Define Service Types and Container Metadata
+
+### Goal
+
+Introduce explicit service types and extend the data model to represent container services.
+
+### Completed
+
+* Added the `ServiceType` enum with `local` and `container` values.
+* Replaced unrestricted string service types with the enum.
+* Added container-specific metadata fields to `ServiceConfig`.
+* Added container-specific metadata fields to `ServiceView`.
+* Updated internal model construction to use enum members.
+* Added model tests for default types, container metadata, external string parsing, and invalid type values.
+* Verified that the complete test suite passes.
+
+### Issues Encountered
+
+* Existing API tests failed because the response model began serializing new optional fields as `null`.
+* Static type checking rejected raw string values when constructing models directly in Python.
+
+### Key Learnings
+
+* Response-model changes can break exact-response assertions even when endpoint behavior remains correct.
+* Internal Python code should use enum members for type safety.
+* External YAML or JSON input can still be validated from string values through Pydantic.
+* Optional fields provide structural flexibility, but type-specific validation is still needed.
+* Regression tests help expose compatibility changes immediately.
+
+### Next
+
+Add type-specific validation rules and preserve container metadata through the runtime layer.

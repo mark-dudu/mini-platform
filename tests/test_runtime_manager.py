@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from app.models.service import ServiceConfig
+from app.models.service import ServiceConfig, ServiceType
 from app.runtime.manager import list_service_views, start_service, stop_service
 
 import pytest
@@ -18,7 +18,7 @@ def clear_service_status():
 def build_container_service() -> ServiceConfig:
     return ServiceConfig(
         name="demo-container",
-        type="container",
+        type=ServiceType.CONTAINER,
         command="podman start demo-container",
         working_dir=".",
         port=8080,

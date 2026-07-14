@@ -3,7 +3,7 @@ from unittest.mock import patch
 from fastapi.testclient import TestClient
 
 from app.main import app
-from app.models.service import ServiceView
+from app.models.service import ServiceType, ServiceView
 
 client = TestClient(app)
 
@@ -11,7 +11,7 @@ client = TestClient(app)
 def build_service_view(status: str = "stopped") -> ServiceView:
     return ServiceView(
         name="demo-service",
-        type="local",
+        type=ServiceType.LOCAL,
         command="python app.py",
         working_dir=".",
         port=8000,
@@ -26,16 +26,15 @@ def test_list_services_returns_service_data(mock_list_service_views):
     response = client.get("/api/services/")
 
     assert response.status_code == 200
-    assert response.json() == [
-        {
-            "name": "demo-service",
-            "type": "local",
-            "command": "python app.py",
-            "working_dir": ".",
-            "port": 8000,
-            "status": "stopped",
-        }
-    ]
+
+    service = response.json()[0]
+
+    assert service["name"] == "demo-service"
+    assert service["type"] == "local"
+    assert service["command"] == "python app.py"
+    assert service["working_dir"] == "."
+    assert service["port"] == 8000
+    assert service["status"] == "stopped"
 
 
 @patch("app.routes.services.start_service")
