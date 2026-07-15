@@ -428,3 +428,34 @@ Introduce explicit service types and extend the data model to represent containe
 ### Next
 
 Add type-specific validation rules and preserve container metadata through the runtime layer.
+
+## Day 12 - Add Type-specific Validation
+
+### Goal
+
+Enforce service-type-specific configuration rules and preserve container metadata through the runtime layer.
+
+### Completed
+
+* Added validation rules for local and container service configurations.
+* Required local services to define `command` and `working_dir`.
+* Required container services to define `container_name` and `image`.
+* Added tests for missing type-specific fields.
+* Added a shared helper for converting `ServiceConfig` into `ServiceView`.
+* Preserved container metadata in list, start, and stop operations.
+* Verified that the complete test suite passes.
+
+### Issues Encountered
+
+* Existing tests using incomplete container service data had to be updated.
+
+### Key Learnings
+
+* Optional fields still require business-level validation.
+* Type-specific rules belong in the configuration model.
+* Centralizing model conversion prevents repeated field-propagation bugs.
+* Tests should use valid domain objects unless invalid input is the behavior being tested.
+
+### Next
+
+Add a container service to the YAML configuration and verify API and dashboard compatibility.

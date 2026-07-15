@@ -59,3 +59,62 @@ def test_service_view_supports_container_metadata():
     assert service.command is None
     assert service.working_dir is None
     assert service.container_name == "mini-platform-nginx"
+
+
+def test_local_service_requires_command():
+    with pytest.raises(
+        ValidationError,
+        match="Local service requires: command",
+    ):
+        ServiceConfig(
+            name="blog",
+            type=ServiceType.LOCAL,
+            working_dir="../my-blog",
+        )
+
+
+def test_local_service_requires_working_dir():
+    with pytest.raises(
+        ValidationError,
+        match="Local service requires: working_dir",
+    ):
+        ServiceConfig(
+            name="blog",
+            type=ServiceType.LOCAL,
+            command="pnpm dev",
+        )
+
+
+def test_container_service_requires_container_name():
+    with pytest.raises(
+        ValidationError,
+        match="Container service requires: container_name",
+    ):
+        ServiceConfig(
+            name="demo-nginx",
+            type=ServiceType.CONTAINER,
+            image="docker.io/library/nginx:alpine",
+        )
+
+
+def test_container_service_requires_image():
+    with pytest.raises(
+        ValidationError,
+        match="Container service requires: image",
+    ):
+        ServiceConfig(
+            name="demo-nginx",
+            type=ServiceType.CONTAINER,
+            container_name="mini-platform-nginx",
+        )
+
+
+def test_container_service_reports_all_missing_required_fields():
+    with pytest.raises(
+        ValidationError,
+        match="Container service requires: container_name, image",
+    ):
+        ServiceConfig(
+            name="demo-nginx",
+            type=ServiceType.CONTAINER,
+        )
