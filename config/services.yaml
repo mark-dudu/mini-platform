@@ -11,3 +11,10 @@ services:
   command: "uvicorn app.main:app --reload"
   working_dir: "."
   port: 8000
+
+- name: demo-nginx
+  type: container
+  container_name: "mini-platform-nginx"
+  image: "docker.io/library/nginx:alpine"
+  host_port: 8080
+  container_port: 80

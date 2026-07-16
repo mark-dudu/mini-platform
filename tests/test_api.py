@@ -19,6 +19,20 @@ def build_service_view(status: str = "stopped") -> ServiceView:
     )
 
 
+def build_container_service_view(
+    status: str = "stopped",
+) -> ServiceView:
+    return ServiceView(
+        name="demo-nginx",
+        type=ServiceType.CONTAINER,
+        container_name="mini-platform-nginx",
+        image="docker.io/library/nginx:alpine",
+        host_port=8080,
+        container_port=80,
+        status=status,
+    )
+
+
 @patch("app.routes.services.list_service_views")
 def test_list_services_returns_service_data(mock_list_service_views):
     mock_list_service_views.return_value = [build_service_view()]
@@ -85,3 +99,24 @@ def test_dashboard_returns_success(mock_list_service_views):
     response = client.get("/")
 
     assert response.status_code == 200
+
+
+@patch("app.main.list_service_views")
+def test_dashboard_supports_mixed_service_types(mock_list_service_views):
+    mock_list_service_views.return_value = [
+        build_service_view(),
+        build_container_service_view(),
+    ]
+
+    response = client.get("/")
+
+    assert response.status_code == 200
+
+    body = response.text
+
+    assert "demo-service" in body
+    assert "python app.py" in body
+    assert "demo-nginx" in body
+    assert "mini-platform-nginx" in body
+    assert "docker.io/library/nginx:alpine" in body
+    assert "8080:80" in body

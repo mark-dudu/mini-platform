@@ -459,3 +459,36 @@ Enforce service-type-specific configuration rules and preserve container metadat
 ### Next
 
 Add a container service to the YAML configuration and verify API and dashboard compatibility.
+
+## Day 13 - Support Mixed Service Configuration
+
+### Goal
+
+Add a container service to the main configuration and verify that the application supports mixed local and container service types.
+
+### Completed
+
+* Added a container service to `services.yaml`.
+* Verified that the configuration loader handles mixed service types.
+* Added a config loader test for local and container services.
+* Updated the dashboard to display type-specific service metadata.
+* Added dashboard coverage for mixed service types.
+* Verified container metadata through the API.
+* Confirmed that existing mock controls continue to work.
+* Verified that the complete test suite passes.
+
+### Issues Encountered
+
+* The original dashboard assumed every service had local command and working-directory fields.
+* Optional container fields would otherwise be rendered as `None`.
+
+### Key Learnings
+
+* A shared dashboard must render data according to the service type.
+* Mixed configurations are an important integration boundary between models, runtime logic, API responses, and templates.
+* Container metadata support does not imply real container runtime control.
+* Integration tests help verify that separately tested layers work correctly together.
+
+### Next
+
+Create a read-only Podman adapter for querying container status.

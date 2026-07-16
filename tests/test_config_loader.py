@@ -3,6 +3,7 @@ from pathlib import Path
 import pytest
 
 from app.core.config_loader import load_services
+from app.models.service import ServiceType
 
 
 def write_config(tmp_path: Path, content: str) -> Path:
@@ -73,3 +74,43 @@ services:
 
     with pytest.raises(ValueError, match="services must be a list"):
         load_services(config_path)
+
+
+def test_load_services_support_mixed_service_types(tmp_path):
+    config_path = write_config(
+        tmp_path,
+        """
+services:
+  - name: blog
+    type: local
+    command: pnpm dev
+    working_dir: ../my-blog
+    port: 3000
+
+  - name: demo-nginx
+    type: container
+    container_name: mini-platform-nginx
+    image: docker.io/library/nginx:alpine
+    host_port: 8080
+    container_port: 80
+""",
+    )
+
+    services = load_services(config_path)
+
+    assert len(services) == 2
+
+    local_service = services[0]
+    assert local_service.name == "blog"
+    assert local_service.type == ServiceType.LOCAL
+    assert local_service.command == "pnpm dev"
+    assert local_service.working_dir == "../my-blog"
+    assert local_service.port == 3000
+
+    container_service = services[1]
+    assert container_service.name == "demo-nginx"
+    assert container_service.type == ServiceType.CONTAINER
+    assert container_service.container_name == "mini-platform-nginx"
+    assert container_service.image == "docker.io/library/nginx:alpine"
+    assert container_service.host_port == 8080
+    assert container_service.container_port == 80

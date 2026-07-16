@@ -18,8 +18,7 @@
             <tr>
                 <th>Name</th>
                 <th>Type</th>
-                <th>Command</th>
-                <th>Working Directory</th>
+                <th>Configuration</th>
                 <th>Port</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -29,17 +28,59 @@
             {% for service in services %}
             <tr>
                 <td>{{ service.name }}</td>
-                <td>{{ service.type }}</td>
-                <td><code>{{ service.command }}</code></td>
-                <td><code>{{ service.working_dir }}</code></td>
-                <td>{{ service.port }}</td>
-                <td>{{ service.status }}</td>
+                <td>{{ service.type.value }}</td>
+
                 <td>
-                    <form method="post" action="/services/{{ service.name }}/start" style="display:inline;">
+                    {% if service.type.value == "local" %}
+                        <div>
+                            Command:
+                            <code>{{ service.command }}</code>
+                        </div>
+                        <div>
+                            Working directory:
+                            <code>{{ service.working_dir }}</code>
+                        </div>
+                    {% elif service.type.value == "container" %}
+                        <div>
+                            Container:
+                            <code>{{ service.container_name }}</code>
+                        </div>
+                        <div>
+                            Image:
+                            <code>{{ service.image }}</code>
+                        </div>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if service.type.value == "local" %}
+                        {{ service.port }}
+                    {% elif service.type.value == "container" %}
+                        {% if service.host_port is not none
+                            and service.container_port is not none %}
+                            {{ service.host_port }}:{{ service.container_port }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    {% endif %}
+                </td>
+
+                <td>{{ service.status }}</td>
+
+                <td>
+                    <form
+                        method="post"
+                        action="/services/{{ service.name }}/start"
+                        style="display:inline;"
+                    >
                         <button type="submit">Start</button>
                     </form>
 
-                    <form method="post" action="/services/{{ service.name }}/stop" style="display:inline;">
+                    <form
+                        method="post"
+                        action="/services/{{ service.name }}/stop"
+                        style="display:inline;"
+                    >
                         <button type="submit">Stop</button>
                     </form>
                 </td>
