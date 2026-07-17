@@ -492,3 +492,38 @@ Add a container service to the main configuration and verify that the applicatio
 ### Next
 
 Create a read-only Podman adapter for querying container status.
+
+## Day 14 - Add Read-only Podman Adapter
+
+### Goal
+
+Create an isolated adapter for querying Podman container status without integrating runtime control into the application.
+
+### Completed
+
+* Added a read-only Podman status adapter.
+* Used `subprocess.run()` with an argument list and timeout.
+* Mapped Podman runtime states to Mini Platform status values.
+* Handled missing containers, unavailable Podman, timeouts, and unexpected errors.
+* Added isolated unit tests by mocking the subprocess dependency.
+* Added support for Podman error messages containing `no such object`.
+* Manually verified an exited container as `stopped`.
+* Manually verified a missing container as `not_found`.
+* Verified that the complete test suite passes.
+
+### Issues Encountered
+
+* The initial adapter only recognized `no such container`.
+* The installed Podman version returned `no such object` for a missing container.
+* The configured `mini-platform-nginx` container did not exist locally because previous validation had been done on another environment.
+
+### Key Learnings
+
+* External CLI error text can vary by version and environment.
+* Runtime adapters should normalize implementation-specific output into stable application states.
+* Manual verification complements mocked unit tests by exposing real command behavior.
+* A configured container name does not guarantee that the container exists on the current host.
+
+### Next
+
+Integrate container status into the service runtime layer without affecting local service behavior.
