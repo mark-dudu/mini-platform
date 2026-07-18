@@ -68,21 +68,25 @@
                 <td>{{ service.status }}</td>
 
                 <td>
-                    <form
-                        method="post"
-                        action="/services/{{ service.name }}/start"
-                        style="display:inline;"
-                    >
-                        <button type="submit">Start</button>
-                    </form>
+                    {% if service.type.value == "local" %}
+                        <form
+                            method="post"
+                            action="/services/{{ service.name }}/start"
+                            style="display:inline;"
+                        >
+                            <button type="submit">Start</button>
+                        </form>
 
-                    <form
-                        method="post"
-                        action="/services/{{ service.name }}/stop"
-                        style="display:inline;"
-                    >
-                        <button type="submit">Stop</button>
-                    </form>
+                        <form
+                            method="post"
+                            action="/services/{{ service.name }}/stop"
+                            style="display:inline;"
+                        >
+                            <button type="submit">Stop</button>
+                        </form>
+                    {% elif service.type.value == "container" %}
+                        <span>Read-only</span>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}

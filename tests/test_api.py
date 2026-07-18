@@ -120,3 +120,34 @@ def test_dashboard_supports_mixed_service_types(mock_list_service_views):
     assert "mini-platform-nginx" in body
     assert "docker.io/library/nginx:alpine" in body
     assert "8080:80" in body
+
+
+@patch("app.main.list_service_views")
+def test_dashboard_marks_container_service_as_read_only(
+    mock_list_service_views,
+):
+    mock_list_service_views.return_value = [
+        build_container_service_view(status="running"),
+    ]
+
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert "Read-only" in response.text
+    assert "/services/demo-nginx/start" not in response.text
+    assert "/services/demo-nginx/stop" not in response.text
+
+
+@patch("app.main.list_service_views")
+def test_dashboard_keeps_mock_controls_for_local_service(
+    mock_list_service_views,
+):
+    mock_list_service_views.return_value = [
+        build_service_view(),
+    ]
+
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert "/services/demo-service/start" in response.text
+    assert "/services/demo-service/stop" in response.text

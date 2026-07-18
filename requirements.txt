@@ -3,6 +3,6 @@ fastapi
 httpx2
 jinja2
 pydantic
-pytest==
+pytest
 pyyaml
 uvicorn
