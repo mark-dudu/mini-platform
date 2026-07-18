@@ -527,3 +527,39 @@ Create an isolated adapter for querying Podman container status without integrat
 ### Next
 
 Integrate container status into the service runtime layer without affecting local service behavior.
+
+## Day 15 - Integrate Real Container Status
+
+### Goal
+
+Integrate real Podman container status into the service runtime layer while preserving local mock behavior.
+
+### Completed
+
+* Added type-aware runtime status resolution.
+* Used Podman status for container services.
+* Preserved mock status handling for local services.
+* Prevented container start and stop routes from fabricating runtime state.
+* Marked container services as read-only in the dashboard.
+* Added runtime and dashboard tests for type-specific behavior.
+* Manually verified running, stopped, and missing container states.
+* Updated the README with the current V2 capability boundary.
+* Verified that the complete test suite passes.
+
+### Issues Encountered
+
+* Existing tests still assumed that container services used mock start and stop behavior.
+* Runtime manager tests initially queried the real local Podman environment because the adapter was not mocked.
+* Existing dashboard controls were misleading after real container status was introduced.
+
+### Key Learnings
+
+* Read and write runtime capabilities should be introduced separately.
+* Unit tests must isolate external runtime dependencies.
+* Tests should reflect current business semantics rather than preserve obsolete behavior.
+* UI controls must accurately represent backend capabilities.
+* Local and container services can share one model while using different runtime strategies.
+
+### Next
+
+Implement real Podman start and stop actions with explicit error handling.

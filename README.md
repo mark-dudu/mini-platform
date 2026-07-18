@@ -252,20 +252,20 @@ Completed capabilities:
 * Show service status
 * Provide mock start / stop controls
 
-### V2 Preparation
+### V2 Progress
 
-V2 preparation has started.
+Completed:
 
-Completed preparation work:
+- Added explicit local and container service types
+- Added type-specific configuration validation
+- Added container metadata support
+- Added mixed local and container configuration
+- Added a read-only Podman status adapter
+- Integrated real container status into the API and dashboard
+- Preserved mock controls for local services
 
-* Added a `type` field to service definitions
-* Marked existing services as `local`
-* Displayed service type in the API and dashboard
-* Practiced basic Podman commands locally
-* Installed and verified Podman on a cloud server
-* Verified a simple containerized HTTP service on the cloud server
+Current limitations:
 
-Next step:
-
-* Add container service metadata, including image, container name, and port mappings
-* Keep container support as metadata first before implementing real runtime control
+- Container services are read-only
+- Real container start and stop actions are not implemented
+- Docker is not supported
