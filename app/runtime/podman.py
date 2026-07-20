@@ -50,3 +50,12 @@ def get_container_status(container_name: str) -> str:
         return "stopped"
 
     return "unavailable"
+
+def start_container(container_name: str) -> None:
+    """Start an existing Podman container."""
+    raise NotImplementedError
+
+
+def stop_container(container_name: str) -> None:
+    """Stop a running Podman container."""
+    raise NotImplementedError

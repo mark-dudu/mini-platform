@@ -2,7 +2,7 @@ import subprocess
 import pytest
 from unittest.mock import Mock, patch
 
-from app.runtime.podman import get_container_status
+from app.runtime.podman import get_container_status, start_container, stop_container
 
 
 @patch("app.runtime.podman.subprocess.run")
@@ -138,3 +138,12 @@ def test_get_container_status_returns_unavailable_for_unknown_status(
     status = get_container_status("demo-container")
 
     assert status == "unavailable"
+
+def test_start_container_interface_is_available():
+    with pytest.raises(NotImplementedError):
+        start_container("demo-container")
+
+
+def test_stop_container_interface_is_available():
+    with pytest.raises(NotImplementedError):
+        stop_container("demo-container")

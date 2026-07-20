@@ -563,3 +563,33 @@ Integrate real Podman container status into the service runtime layer while pres
 ### Next
 
 Implement real Podman start and stop actions with explicit error handling.
+
+## Day 16 - Runtime Control Interface and Error Model (2026-07-20)
+
+### Goal
+
+Define the control interface and error boundaries required for real container start and stop operations.
+
+### Completed
+
+* Added start and stop function interfaces to the Podman runtime module.
+* Added runtime-specific domain exceptions.
+* Kept runtime exceptions independent from HTTP response handling.
+* Added tests for the new control interfaces and exception hierarchy.
+* Verified that all 56 tests passed.
+
+### Issues Encountered
+
+* None.
+
+### Key Learnings
+
+* Runtime-specific implementation details should remain inside the runtime module.
+* Command operations and status queries can use different failure-handling strategies.
+* Low-level runtime failures should be converted into stable domain exceptions.
+* Domain exceptions should not depend on HTTP or FastAPI concepts.
+* A small functional interface is sufficient at the current project scale; introducing an abstract class would add unnecessary complexity.
+
+### Next
+
+* Implement real container start operations through the Podman CLI.
