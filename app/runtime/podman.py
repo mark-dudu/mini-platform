@@ -1,5 +1,7 @@
 import subprocess
 
+from app.runtime.exceptions import ContainerNotFoundError, RuntimeCommandError, RuntimeUnavailableError
+
 
 def get_container_status(container_name: str) -> str:
     try:
@@ -53,7 +55,41 @@ def get_container_status(container_name: str) -> str:
 
 def start_container(container_name: str) -> None:
     """Start an existing Podman container."""
-    raise NotImplementedError
+    try:
+        result = subprocess.run(
+            ["podman", "start", container_name],
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=10,
+        )
+    except FileNotFoundError as exc:
+        raise RuntimeUnavailableError(
+            "Podman runtime is not available."
+        ) from exc
+    except subprocess.TimeoutExpired as exc:
+        raise RuntimeUnavailableError(
+            f"Timed out while starting container '{container_name}'."
+        ) from exc
+
+    if result.returncode == 0:
+        return
+
+    error_output = result.stderr.lower()
+
+    not_found_markers = (
+        "no such container",
+        "no such object",
+    )
+
+    if any(marker in error_output for marker in not_found_markers):
+        raise ContainerNotFoundError(
+            f"Container '{container_name}' was not found."
+        )
+
+    raise RuntimeCommandError(
+        f"Failed to start container '{container_name}'."
+    )
 
 
 def stop_container(container_name: str) -> None:

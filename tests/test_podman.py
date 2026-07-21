@@ -2,6 +2,7 @@ import subprocess
 import pytest
 from unittest.mock import Mock, patch
 
+from app.runtime.exceptions import ContainerNotFoundError, RuntimeCommandError, RuntimeUnavailableError
 from app.runtime.podman import get_container_status, start_container, stop_container
 
 
@@ -139,10 +140,64 @@ def test_get_container_status_returns_unavailable_for_unknown_status(
 
     assert status == "unavailable"
 
-def test_start_container_interface_is_available():
-    with pytest.raises(NotImplementedError):
+@patch("app.runtime.podman.subprocess.run")
+def test_start_container_runs_podman_start(mock_run):
+    mock_run.return_value = Mock(
+        returncode=0,
+        stdout="demo-container\n",
+        stderr="",
+    )
+
+    start_container("demo-container")
+
+    mock_run.assert_called_once_with(
+        ["podman", "start", "demo-container"],
+        capture_output=True,
+        text=True,
+        check=False,
+        timeout=10,
+    )
+
+@patch("app.runtime.podman.subprocess.run")
+def test_start_container_raises_runtime_unavailable_when_podman_is_missing(
+    mock_run,
+):
+    mock_run.side_effect = FileNotFoundError
+
+    with pytest.raises(RuntimeUnavailableError):
         start_container("demo-container")
 
+@patch("app.runtime.podman.subprocess.run")
+def test_start_container_raises_runtime_unavailable_on_timeout(mock_run):
+    mock_run.side_effect = subprocess.TimeoutExpired(
+        cmd=["podman", "start", "demo-container"],
+        timeout=10,
+    )
+
+    with pytest.raises(RuntimeUnavailableError):
+        start_container("demo-container")
+
+@patch("app.runtime.podman.subprocess.run")
+def test_start_container_raises_container_not_found(mock_run):
+    mock_run.return_value = Mock(
+        returncode=125,
+        stdout="",
+        stderr='Error: no such container "demo-container"',
+    )
+
+    with pytest.raises(ContainerNotFoundError):
+        start_container("demo-container")
+
+@patch("app.runtime.podman.subprocess.run")
+def test_start_container_raises_runtime_command_error(mock_run):
+    mock_run.return_value = Mock(
+        returncode=1,
+        stdout="",
+        stderr="unexpected runtime error",
+    )
+
+    with pytest.raises(RuntimeCommandError):
+        start_container("demo-container")
 
 def test_stop_container_interface_is_available():
     with pytest.raises(NotImplementedError):

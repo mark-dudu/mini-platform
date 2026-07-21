@@ -593,3 +593,34 @@ Define the control interface and error boundaries required for real container st
 ### Next
 
 * Implement real container start operations through the Podman CLI.
+
+## Day 17 - Real Podman Container Start (2026-07-21)
+
+### Goal
+
+Implement real container start operations through the Podman CLI.
+
+### Completed
+
+* Implemented `start_container()` using `podman start`.
+* Converted missing runtime and timeout failures into `RuntimeUnavailableError`.
+* Converted missing-container failures into `ContainerNotFoundError`.
+* Converted other command failures into `RuntimeCommandError`.
+* Added unit tests for successful and failed container start operations.
+* Verified that all 60 tests passed.
+
+### Issues Encountered
+
+* None.
+
+### Key Learnings
+
+* Command operations should raise domain exceptions instead of returning ambiguous status strings.
+* Runtime modules should translate low-level subprocess failures before passing them to higher layers.
+* Error output can be used internally for classification without exposing raw runtime details.
+* Using `check=False` allows different command failures to be mapped explicitly.
+* Unit tests can verify runtime behavior without requiring a live Podman environment.
+
+### Next
+
+* Implement real container stop operations through the Podman CLI.
