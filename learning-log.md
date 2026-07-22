@@ -624,3 +624,33 @@ Implement real container start operations through the Podman CLI.
 ### Next
 
 * Implement real container stop operations through the Podman CLI.
+
+## Day 18 - Real Podman Container Stop (2026-07-22)
+
+### Goal
+
+Implement real container stop operations through the Podman CLI.
+
+### Completed
+
+* Implemented `stop_container()` using `podman stop`.
+* Converted missing runtime and timeout failures into `RuntimeUnavailableError`.
+* Converted missing-container failures into `ContainerNotFoundError`.
+* Converted other command failures into `RuntimeCommandError`.
+* Added unit tests for successful and failed container stop operations.
+* Verified that all 64 tests passed.
+
+### Issues Encountered
+
+* None.
+
+### Key Learnings
+
+* Start and stop operations share similar runtime error handling patterns.
+* Runtime modules should hide Podman CLI details from higher layers.
+* Command execution failures should be converted into predictable domain exceptions.
+* Unit tests can validate runtime behavior without requiring a running container.
+
+### Next
+
+* Integrate container start/stop operations into Runtime Manager.
