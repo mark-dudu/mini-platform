@@ -1,6 +1,6 @@
 from app.core.config_loader import load_services
 from app.models.service import ServiceView, ServiceConfig, ServiceType
-from app.runtime.podman import get_container_status
+from app.runtime.podman import get_container_status, start_container, stop_container
 
 _service_status: dict[str, str] = {}
 
@@ -52,6 +52,13 @@ def start_service(service_name: str) -> ServiceView | None:
     if service is None:
         return None
     if service.type == ServiceType.CONTAINER:
+        if service.container_name is None:
+            return _build_service_view(
+                service,
+                "unavailable",
+            )
+
+        start_container(service.container_name)
         return _build_service_view(
             service,
             _get_service_status(service),
@@ -70,6 +77,13 @@ def stop_service(service_name: str) -> ServiceView | None:
         return None
 
     if service.type == ServiceType.CONTAINER:
+        if service.container_name is None:
+            return _build_service_view(
+                service,
+                "unavailable",
+            )
+
+        stop_container(service.container_name)
         return _build_service_view(
             service,
             _get_service_status(service),

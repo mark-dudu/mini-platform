@@ -55,9 +55,10 @@ def test_list_service_views_preserves_service_type(
 
 
 @patch("app.runtime.manager.get_container_status")
+@patch("app.runtime.manager.start_container")
 @patch("app.runtime.manager.load_services")
 def test_start_service_preserves_service_type(
-    mock_load_services, mock_get_container_status
+    mock_load_services, mock_start_container, mock_get_container_status
 ):
     mock_load_services.return_value = [build_container_service()]
     mock_get_container_status.return_value = "stopped"
@@ -69,12 +70,14 @@ def test_start_service_preserves_service_type(
     assert service.status == "stopped"
 
     mock_get_container_status.assert_called_once_with("demo-container")
+    mock_start_container.assert_called_once_with("demo-container")
 
 
 @patch("app.runtime.manager.get_container_status")
+@patch("app.runtime.manager.stop_container")
 @patch("app.runtime.manager.load_services")
 def test_stop_service_preserves_service_type(
-    mock_load_services, mock_get_container_status
+    mock_load_services, mock_stop_container, mock_get_container_status
 ):
     mock_load_services.return_value = [build_container_service()]
     mock_get_container_status.return_value = "running"
@@ -86,6 +89,7 @@ def test_stop_service_preserves_service_type(
     assert service.status == "running"
 
     mock_get_container_status.assert_called_once_with("demo-container")
+    mock_stop_container.assert_called_once_with("demo-container")
 
 
 @patch("app.runtime.manager.get_container_status")
@@ -147,9 +151,10 @@ def test_start_local_service_updates_runtime_status(mock_load_services):
 
 
 @patch("app.runtime.manager.get_container_status")
+@patch("app.runtime.manager.start_container")
 @patch("app.runtime.manager.load_services")
 def test_start_service_preserves_container_metadata(
-    mock_load_services, mock_get_container_status
+    mock_load_services, mock_start_container, mock_get_container_status
 ):
     mock_load_services.return_value = [build_container_service()]
     mock_get_container_status.return_value = "stopped"
@@ -162,6 +167,7 @@ def test_start_service_preserves_container_metadata(
     assert service.image == "docker.io/library/nginx:alpine"
     assert service.status == "stopped"
     mock_get_container_status.assert_called_once_with("demo-container")
+    mock_start_container.assert_called_once_with("demo-container")
 
 
 @patch("app.runtime.manager.load_services")
@@ -176,9 +182,10 @@ def test_stop_local_service_updates_runtime_status(mock_load_services):
 
 
 @patch("app.runtime.manager.get_container_status")
+@patch("app.runtime.manager.stop_container")
 @patch("app.runtime.manager.load_services")
 def test_stop_service_preserves_container_metadata(
-    mock_load_services, mock_get_container_status
+    mock_load_services, mock_stop_container, mock_get_container_status
 ):
     mock_load_services.return_value = [build_container_service()]
     mock_get_container_status.return_value = "running"
@@ -191,6 +198,7 @@ def test_stop_service_preserves_container_metadata(
     assert service.image == "docker.io/library/nginx:alpine"
     assert service.status == "running"
     mock_get_container_status.assert_called_once_with("demo-container")
+    mock_stop_container.assert_called_once_with("demo-container")
 
 
 @patch("app.runtime.manager.load_services")
@@ -212,9 +220,11 @@ def test_stop_service_returns_none_for_unknown_service(mock_load_services):
 
 
 @patch("app.runtime.manager.get_container_status")
+@patch("app.runtime.manager.start_container")
 @patch("app.runtime.manager.load_services")
 def test_start_container_service_returns_actual_runtime_status(
     mock_load_services,
+    mock_start_container,
     mock_get_container_status,
 ):
     mock_load_services.return_value = [build_container_service()]
@@ -225,12 +235,15 @@ def test_start_container_service_returns_actual_runtime_status(
     assert service is not None
     assert service.status == "stopped"
     mock_get_container_status.assert_called_once_with("demo-container")
+    mock_start_container.assert_called_once_with("demo-container")
 
 
 @patch("app.runtime.manager.get_container_status")
+@patch("app.runtime.manager.stop_container")
 @patch("app.runtime.manager.load_services")
 def test_stop_container_service_returns_actual_runtime_status(
     mock_load_services,
+    mock_stop_container,
     mock_get_container_status,
 ):
     mock_load_services.return_value = [build_container_service()]
@@ -241,3 +254,71 @@ def test_stop_container_service_returns_actual_runtime_status(
     assert service is not None
     assert service.status == "running"
     mock_get_container_status.assert_called_once_with("demo-container")
+    mock_stop_container.assert_called_once_with("demo-container")
+
+@patch("app.runtime.manager.get_container_status")
+@patch("app.runtime.manager.start_container")
+@patch("app.runtime.manager.load_services")
+def test_start_container_service_calls_runtime_and_refreshes_status(
+    mock_load_services,
+    mock_start_container,
+    mock_get_container_status,
+):
+    mock_load_services.return_value = [build_container_service()]
+    mock_get_container_status.return_value = "running"
+
+    service = start_service("demo-container")
+
+    assert service is not None
+    assert service.status == "running"
+
+    mock_start_container.assert_called_once_with("demo-container")
+    mock_get_container_status.assert_called_once_with("demo-container")
+
+@patch("app.runtime.manager.get_container_status")
+@patch("app.runtime.manager.stop_container")
+@patch("app.runtime.manager.load_services")
+def test_stop_container_service_calls_runtime_and_refreshes_status(
+    mock_load_services,
+    mock_stop_container,
+    mock_get_container_status,
+):
+    mock_load_services.return_value = [build_container_service()]
+    mock_get_container_status.return_value = "stopped"
+
+    service = stop_service("demo-container")
+
+    assert service is not None
+    assert service.status == "stopped"
+
+    mock_stop_container.assert_called_once_with("demo-container")
+    mock_get_container_status.assert_called_once_with("demo-container")
+
+@patch("app.runtime.manager.start_container")
+@patch("app.runtime.manager.load_services")
+def test_start_local_service_does_not_call_container_runtime(
+    mock_load_services,
+    mock_start_container,
+):
+    mock_load_services.return_value = [build_local_service()]
+
+    service = start_service("demo-local")
+
+    assert service is not None
+    assert service.status == "running"
+    mock_start_container.assert_not_called()
+
+@patch("app.runtime.manager.stop_container")
+@patch("app.runtime.manager.load_services")
+def test_stop_local_service_does_not_call_container_runtime(
+    mock_load_services,
+    mock_stop_container,
+):
+    mock_load_services.return_value = [build_local_service()]
+
+    service = stop_service("demo-local")
+
+    assert service is not None
+    assert service.status == "stopped"
+    mock_stop_container.assert_not_called()
+

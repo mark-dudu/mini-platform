@@ -654,3 +654,36 @@ Implement real container stop operations through the Podman CLI.
 ### Next
 
 * Integrate container start/stop operations into Runtime Manager.
+
+## Day 19 - Runtime Manager Container Control Integration (2026-07-23)
+
+### Goal
+
+Integrate real Podman container start and stop operations into the runtime manager.
+
+### Completed
+
+* Connected container service start operations to the Podman runtime.
+* Connected container service stop operations to the Podman runtime.
+* Refreshed container status after each runtime command.
+* Preserved the existing mock behavior for local services.
+* Updated existing tests to isolate real Podman operations.
+* Added tests to verify runtime dispatch for local and container services.
+* Verified that all 68 tests passed.
+
+### Issues Encountered
+
+* Existing container manager tests initially called the real Podman runtime because they only mocked status queries.
+* The affected tests were updated to mock `start_container()` and `stop_container()`.
+
+### Key Learnings
+
+* The manager coordinates application behavior while runtime-specific command details remain in the runtime module.
+* Runtime commands should be followed by a fresh status query rather than assuming the resulting state.
+* Mock return values are unnecessary when the production function returns `None` and the caller does not use the result.
+* Existing tests must be updated when a previously read-only integration begins performing real commands.
+* Local and container services can share the same application-level interface while using different runtime implementations.
+
+### Next
+
+* Map runtime exceptions to stable API responses and display operation feedback in the Dashboard.
